@@ -1,0 +1,1 @@
+import"./http.27f2615d.js";import{p as a,a as s,o as t,f as e,j as o,g as d}from"./vendor.2b429735.js";const p={name:"teachPage",props:{},setup(a){}},r=o();a("data-v-2060e74a");const c={class:"mainBox"},n=d("div",{class:"title"}," 平平无奇的教程 ",-1);s();const i=r(((a,s,o,d,p,r)=>(t(),e("div",c,[n]))));p.render=i,p.__scopeId="data-v-2060e74a";export{p as default};

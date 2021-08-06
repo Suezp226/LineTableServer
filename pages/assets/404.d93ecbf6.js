@@ -1,0 +1,1 @@
+import"./http.27f2615d.js";import{p as s,a,o as t,f as e,j as o,g as c}from"./vendor.2b429735.js";const p={name:"page1",props:{},setup(s){}},d=o();s("data-v-68fcfc1e");const f={class:"mainBox"},r=c("div",{class:"title"}," 平平无奇的 404 ",-1);a();const n=d(((s,a,o,c,p,d)=>(t(),e("div",f,[r]))));p.render=n,p.__scopeId="data-v-68fcfc1e";export{p as default};
