@@ -29,7 +29,7 @@ router.all('*',(req,res,next)=>{
 router.get('/',(req,res,next)=>{
   let query = req.query;
   //  第一个参数控制 查找条件 第二个控制返回参数  不传就是所有字段 包括_id
-  table.find({},{},(err,docs)=>{
+  table.find({...query},{},(err,docs)=>{
     if(!err) {
       res.send({code:200,list:docs})
     }
@@ -63,5 +63,31 @@ router.post('/addTable',function(req,res,next){
     }
   })
 })
+
+
+// 修改
+router.post('/editTable',function(req,res,next){
+  let query = req.body;
+  table.find({_id:query._id},{},(err,docs)=>{
+    if(docs.length !== 0) {
+      table.updateOne({ _id: query._id}, {...query}, (err,resp)=>{
+        if(!err) {
+          console.log('修改成功');
+          table.find({...query},{},(err,docs)=>{
+            res.send({docs,code:200});
+          })
+        } else {
+          throw err;
+        }
+      })
+    } else {
+      res.send({code:302,msg:'未查询到该条数据'})
+    }
+  })
+})
+
+//删除 
+// Model.deleteOne(conditions,callback);
+
 
 module.exports = {router}
