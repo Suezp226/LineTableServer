@@ -12,7 +12,7 @@ let tableInfo = new Schema({
   nameStr: String,     //  中文名称
   tableTags: Array,      // 列表数据项
   toolTags: Array,  // 工具栏
-  keywordsList: Array  //  关键字包含的字段
+  keywordsList: Array,  //  关键字包含的字段
 })
 
 // Model 对应数据库中 表名
@@ -88,6 +88,23 @@ router.post('/editTable',function(req,res,next){
 
 //删除 
 // Model.deleteOne(conditions,callback);
+
+router.post('/deleteTable',function(req,res,next){
+  let query = req.body;
+  table.find({_id:query._id},{},(err,docs)=>{
+    if(docs.length < 1) {
+      res.send({code:200,msg:'删除失败，未找到该数据'});
+      return
+    }
+    if(!err) {
+      table.deleteOne({_id:query._id},(err)=>{
+        if(!err) {
+          res.send({code:200,msg:'删除成功'})
+        }
+      })
+    }
+  })
+})
 
 
 module.exports = {router}
