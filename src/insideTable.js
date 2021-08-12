@@ -63,7 +63,7 @@ router.use(express.urlencoded({ extended: true }));
 //新增数据
 router.post('/addInsideData', (req, res, next) => {
   let query = req.body;
-  let id = query._id;
+  let id = query._id;  // 总表id
   table.findOne({ _id: id }, {}, (err, docs) => {
     let insideTableInfo = getInsideTableSchema(docs.tagSchema)
     let nowModel = insideTable[('lineTableData' + docs._id)];
@@ -87,7 +87,9 @@ router.post('/addInsideData', (req, res, next) => {
 
 // 编辑数据
 router.post('/editInsideData', (req, res, next) => {
+  // table_id //总表的id    _id 该条数据的id
   let query = req.body;
+
 })
 
 
