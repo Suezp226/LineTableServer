@@ -35,7 +35,9 @@ let insideTable = {};
 // 获取表格数据
 router.get('/getInsideData', (req, res, next) => {
     let query = req.query;
-    table.findOne({...query }, {}, (err, docs) => {
+    let param = JSON.parse(query.param);
+    
+    table.findOne({_id: param._id}, {}, (err, docs) => {
         let insideTableInfo = getInsideTableSchema(docs.tagSchema);
         let nowModel = insideTable[('lineTableData' + docs._id)];
 
@@ -44,11 +46,42 @@ router.get('/getInsideData', (req, res, next) => {
             insideTable[('lineTableData' + docs._id)] = mongoose.model('lineTableData' + docs._id, insideTableInfo);
             nowModel = insideTable[('lineTableData' + docs._id)];
         };
-        nowModel.find({}, {}, (err, docs) => {
-            if (err) {
-                console.log(err)
-            }
-            res.send({ code: 200, docs })
+        let list = [];  // 返回给前端的参数
+        let qq = {...param};
+        let pages = param.pages; // 分页参数  page当前页 pageSize 每页条数 total 总数
+        let {keywords,keywordsList} = qq;
+        delete qq.keywords;
+        delete qq.keywordsList;
+        delete qq._id;
+        delete qq.pages;
+        for (const key in qq) {
+          if(!qq || qq[key].trim() == '') {
+            delete qq[key]
+          }
+        }
+        nowModel.find({...qq}, {}, (err, docs) => {
+          if (err) {
+              console.log(err)
+              res.send({code: 555,msg: '服务器错误'});
+          }
+          if(keywords.trim() !== '') {
+            let str = '';
+            docs.forEach(ele=>{
+              str = '';
+              keywordsList.forEach(kw=>{
+                str += ele[kw]?ele[kw]:'' + '';
+              })
+              if(str.indexOf(keywords) !== -1) {
+                list.push(ele);
+              }
+            })
+          } else {
+            list = docs;
+          }
+          let returnPages = {...pages};
+          returnPages.total = list.length;
+          list = list.splice((pages.page-1) * pages.pageSize,pages.pageSize);
+          res.send({ code: 200, list:list, pages:returnPages})
         })
     })
 })
