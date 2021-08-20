@@ -106,6 +106,7 @@ router.post('/addInsideData', (req, res, next) => {
             nowModel = insideTable[('lineTableData' + docs._id)];
         };
         let param = {...query };
+        param.modifyDate = new Date().valueOf();
         delete param._id; //删掉该表的 id
         nowModel.create([param], (err) => {
             if (!err) {
@@ -133,6 +134,7 @@ router.post('/editInsideData', (req, res, next) => {
         let param = {...query };
         nowModel.find({ _id: param._id }, {}, (err, docs) => { //先查找是否有该条数据 再进行操作
             if (docs.length !== 0) {
+                param.modifyDate = new Date().valueOf();
                 nowModel.updateOne({ _id: param._id }, {...param }, (err, docs) => {
                     if (!err) {
                         console.log('修改成功');
